@@ -29,15 +29,21 @@ struct box_t
       tft->fillRect(x, y, w, h,BGCOLOR);
     }
   }
-  void draw(bool shift)
+  void draw(bool shift, bool sel=false)
   {
+    uint16_t c=FGCOLOR;
+    uint16_t b=BGCOLOR;
+    if(sel) {
+      c=BGCOLOR;
+      b=FGCOLOR;
+    }
     int ie = touch_id < 0 ? 4 : 8;
     for (int i = 0; i < ie; ++i)
     {
       tft->drawRect(x, y, w, h,color);
       tft->setTextColor(color);
-      if(shift) tft->drawChar2(x+w/2-FM*LW/2,y+h/2-FM*LH/2,key_sh,FGCOLOR,BGCOLOR);
-      else tft->drawChar2(x+w/2-FM*LW/2,y+h/2-FM*LH/2,key,FGCOLOR,BGCOLOR);
+      if(shift) tft->drawChar2(x+w/2-FM*LW/2,y+h/2-FM*LH/2,key_sh,c,b);
+      else tft->drawChar2(x+w/2-FM*LW/2,y+h/2-FM*LH/2,key,c,b);
     }
   }
   bool contain(int x, int y)
@@ -152,7 +158,7 @@ String keyboard(String mytext, int maxSize, String msg) {
     };
   #endif
   const int _x = tftWidth/12;
-  const int _y = (tftHeight - 54)/4;
+  const int _y = (tftHeight - (2*KBLH + 14))/4;
   const int _xo = _x/2-3;
 #if defined(HAS_TOUCH)
   int k=0;
@@ -290,20 +296,17 @@ String keyboard(String mytext, int maxSize, String msg) {
       int _i=0;
       for(int i=0;i<4;i++) {
         for(int j=0;j<12;j++) {
+          /* Print the letters */
+        #ifdef HAS_TOUCH
+          box_list[_i++].draw(caps,x==j && y==i?true:false);
+        #else
           //use last coordenate to paint only this letter
           if(x2==j && y2==i) { tft->setTextColor(~BGCOLOR, BGCOLOR); tft->fillRect(j*_x,i*_y+KBLH*2+14,_x,_y,BGCOLOR);}
           /* If selected, change font color and draw Rectangle*/
           if(x==j && y==i) { tft->setTextColor(BGCOLOR, ~BGCOLOR); tft->fillRect(j*_x,i*_y+KBLH*2+14,_x,_y,~BGCOLOR);}
-
-
-          /* Print the letters */
-        #ifdef HAS_TOUCH
-          box_list[_i++].draw(caps);
-        #else
-          if(!caps) tft->drawChar2((j*_x+_xo), (i*_y+2*KBLH+LH*FM),keys[i][j][0], x==j && y==i? BGCOLOR : FGCOLOR, x==j && y==i? ~BGCOLOR : BGCOLOR);
-          else tft->drawChar2((j*_x+_xo), (i*_y+2*KBLH+LH*FM),keys[i][j][1], x==j && y==i? BGCOLOR : FGCOLOR, x==j && y==i? ~BGCOLOR : BGCOLOR);
+          if(!caps) tft->drawChar2((j*_x+_xo), (i*_y+2*KBLH+16),keys[i][j][0], x==j && y==i? BGCOLOR : FGCOLOR, x==j && y==i? ~BGCOLOR : BGCOLOR);
+          else tft->drawChar2((j*_x+_xo), (i*_y+2*KBLH+16),keys[i][j][1], x==j && y==i? BGCOLOR : FGCOLOR, x==j && y==i? ~BGCOLOR : BGCOLOR);
         #endif
-
           /* Return colors to normal to print the other letters */
           if(x==j && y==i) { tft->setTextColor(~BGCOLOR, BGCOLOR); }
         }
@@ -314,6 +317,7 @@ String keyboard(String mytext, int maxSize, String msg) {
       redraw = false;
     #ifdef E_PAPER_DISPLAY
       tft->startCallback();
+      tft->display(false);
     #endif
     }
 
@@ -321,16 +325,16 @@ String keyboard(String mytext, int maxSize, String msg) {
     if(mytext.length()>(maxFMSize)) {
       tft->setTextSize(FP);
       if(mytext.length()>(maxFPSize)) {
-        cY=42;
+        cY=KBLH+2*LH+6;
         cX=5+(mytext.length()-maxFPSize)*LW;
       }
       else {
-        cY=34;
+        cY=KBLH+LH+6;
         cX=5+mytext.length()*LW;
       }
     } else {
-      cY=34;
-      cX=5+mytext.length()*LW*2;
+      cY=KBLH+LH+6;
+      cX=5+mytext.length()*LW*FM;
     }
 
     if(millis()-holdCode>250) { // allow reading inputs

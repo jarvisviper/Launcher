@@ -182,7 +182,13 @@ void handleUpload(AsyncWebServerRequest *request, String filename, size_t index,
             createDirRecursive(dirPath);
           }
           // Upload de arquivo único
+          TRY_AGAIN:
           request->_tempFile = SDM.open(uploadFolder + "/" + filename, "w");
+          if(!request->_tempFile) {
+            Serial.println("Fail creating file: " + String(filename));
+            vTaskDelay(5 / portTICK_PERIOD_MS);
+            goto TRY_AGAIN;
+          }
       } else {
         runOnce=false;
         // open the file on first call and store the file handle in the request object
@@ -505,6 +511,9 @@ String readLineFromFile(File myFile) {
 
 #ifndef HEADLESS
 void startWebUi(String ssid, int encryptation, bool mode_ap) {
+  #ifdef E_PAPER_DISPLAY
+    tft->stopCallback();
+  #endif
   file_size = 0;
   //log_i("Recovering User info from config.conf");
   getConfigs();
@@ -551,6 +560,11 @@ void startWebUi(String ssid, int encryptation, bool mode_ap) {
   setTftDisplay(7,tftHeight-39,ALCOLOR,FP);
 
   tft->drawCentreString("press " + String(BTN_ALIAS) + " to stop", tftWidth/2,tftHeight-15,1);
+
+#ifdef E_PAPER_DISPLAY
+  tft->display(false);
+  tft->startCallback();
+#endif
 
   while (!check(SelPress))
   {
