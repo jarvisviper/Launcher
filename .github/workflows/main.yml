@@ -177,8 +177,8 @@
               }
             - {
                 vendor: "CYD",
-                name: "CYD-2432S028R",
-                description: "(OTA) Inverted Colors",
+                name: "CYD-2432S028R Inverted Colors",
+                description: "(OTA)",
                 link: "",
                 family: "ESP32",
                 env: "CYD-2-USB",
@@ -188,8 +188,8 @@
               }
             - {
                 vendor: "CYD",
-                name: "CYD-2432W328C",
-                description: "(Capacitive)(OTA) Inverted Colors and 2.4in",
+                name: "CYD-2432W328C Inverted Colors and 2.4in ",
+                description: "(Capacitive)(OTA)",
                 link: "",
                 family: "ESP32",
                 env: "CYD-2432W328C_2",
