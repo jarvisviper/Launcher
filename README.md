@@ -65,6 +65,10 @@ Things that needs to be done in next updates
      * [ ] LVGL for e-paper displays
 
 ## Changelog
+* 2.4.9:
+     * [x] Fixed T-Display-S3 PRO
+     * [x] Enabled OTA for Marauder Mini
+
 * 2.4.8:
      * [x] Enabled OTA function to: CYD 2432S028R, 2-USB, S024R, W328C/R, Marauder boards, Awok boards, Phantom, Lilygo T-Embed CC1101 and T-Deck (regular and plus)
      * [x] Port to [AWOK Mini v2](https://awokdynamics.com/products/dual-mini-v2) and [AWOK Touch v2](https://awokdynamics.com/products/dual-touch-v2)
