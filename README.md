@@ -65,6 +65,11 @@ Things that needs to be done in next updates
      * [ ] LVGL for e-paper displays
 
 ## Changelog
+* 2.4.10:
+     * [x] Fixed T-Embed screen
+     * [x] Fixed StickC (and plus) keyboard navigation
+     * [x] Phantom touchscreen mapping
+
 * 2.4.9:
      * [x] Fixed T-Display-S3 PRO
      * [x] Enabled OTA for Marauder Mini

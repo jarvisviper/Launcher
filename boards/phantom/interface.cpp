@@ -64,23 +64,23 @@ void InputHandler(void) {
         if (touch.touched()) {
             auto t = touch.getPointScaled();
             auto t2 = touch.getPointRaw();
-            // Serial.printf("\nRAW: Touch Pressed on x=%d, y=%d, rot: %d", t2.x, t2.y, rotation);
-            // Serial.printf("\nBEF: Touch Pressed on x=%d, y=%d, rot: %d", t.x, t.y, rotation);
-            if (rotation == 0) {
+            Serial.printf("\nRAW: Touch Pressed on x=%d, y=%d, rot: %d", t2.x, t2.y, rotation);
+            Serial.printf("\nBEF: Touch Pressed on x=%d, y=%d, rot: %d", t.x, t.y, rotation);
+            if (rotation == 2) {
                 t.y = (tftHeight + 20) - t.y;
                 t.x = tftWidth - t.x;
             }
-            if (rotation == 1) {
+            if (rotation == 3) {
                 int tmp = t.x;
                 t.x = tftWidth - t.y;
                 t.y = tmp;
             }
-            if (rotation == 3) {
+            if (rotation == 1) {
                 int tmp = t.x;
                 t.x = t.y;
                 t.y = (tftHeight + 20) - tmp;
             }
-            // Serial.printf("\nAFT: Touch Pressed on x=%d, y=%d, rot: %d\n", t.x, t.y, rotation);
+            Serial.printf("\nAFT: Touch Pressed on x=%d, y=%d, rot: %d\n", t.x, t.y, rotation);
             tm = millis();
             if (!wakeUpScreen()) AnyKeyPress = true;
             else return;
