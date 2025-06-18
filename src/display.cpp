@@ -495,10 +495,9 @@ Opt_Coord drawOptions(
 #ifdef HAS_TOUCH
     if (arraySize <= MAX_MENU_SIZE) num_pages = 1;
     else {
-        int remains =
-            arraySize -
-            (MAX_MENU_SIZE -
-             1); // Primeira pagina tem MAX_MENU_SIZE-1 de tamanho, pois substitui o ultimo por "..."
+        int remains = arraySize -
+                      (MAX_MENU_SIZE - 1
+                      ); // Primeira pagina tem MAX_MENU_SIZE-1 de tamanho, pois substitui o ultimo por "..."
         int nextPages = remains / (MAX_MENU_SIZE - 2); // O restante do menu tem MAX_MENU_SIZE-2 de tamanho,
                                                        // pois substitui o primeiro e o ultimo por "..."
         int lastPage =
@@ -573,8 +572,7 @@ Opt_Coord drawOptions(
         Max_items = MAX_MENU_SIZE - 2;
     }
     if (show_page > 0) {
-        opt.push_back(
-            MenuOptions("", "-", nullptr, true, false, 10 + 5 * FM * LW, 0, tftWidth, FM * LH + 10)
+        opt.push_back(MenuOptions("", "-", nullptr, true, false, 10 + 5 * FM * LW, 0, tftWidth, FM * LH + 10)
         );
         tft->setTextColor(ALCOLOR, BGCOLOR);
         txt = "..Page Up..";
@@ -616,8 +614,7 @@ Opt_Coord drawOptions(
 
 #ifdef HAS_TOUCH
     if (num_pages != show_page + 1) {
-        opt.push_back(
-            MenuOptions("", "+", nullptr, true, false, 0, tft->getCursorY(), tftWidth, FM * LH + 6)
+        opt.push_back(MenuOptions("", "+", nullptr, true, false, 0, tft->getCursorY(), tftWidth, FM * LH + 6)
         );
         txt = "..Page Down..";
         tft->drawCentreString(txt.substring(0, nchars), tftWidth / 2, tft->getCursorY() + 4, 1);
@@ -825,8 +822,7 @@ Opt_Coord listFiles(int index, String fileList[][3], std::vector<MenuOptions> &o
         Max_items = MAX_ITEMS - 2;
     }
     if (show_page > 0) {
-        opt.push_back(
-            MenuOptions("", "-", nullptr, true, false, 10 + 5 * FM * LW, 0, tftWidth, FM * LH + 10)
+        opt.push_back(MenuOptions("", "-", nullptr, true, false, 10 + 5 * FM * LW, 0, tftWidth, FM * LH + 10)
         );
         tft->setTextColor(ALCOLOR, BGCOLOR);
         tft->drawRightString("..Page Up..", tftWidth - 6, tft->getCursorY(), 1);
@@ -841,7 +837,7 @@ Opt_Coord listFiles(int index, String fileList[][3], std::vector<MenuOptions> &o
             tft->setCursor(10, c_y);
 
 #ifdef HAS_TOUCH
-            if (start == i && show_page == 0) {
+            if (start == i) {
                 first_offset = 10 + 5 * LW * FM; // [ESC]
                 tft->setTextColor(ALCOLOR, BGCOLOR);
                 tft->print("[ESC]");
@@ -856,14 +852,24 @@ Opt_Coord listFiles(int index, String fileList[][3], std::vector<MenuOptions> &o
             if (index == i) {
                 optItem.selected = true;
                 txt = ">";
+#ifdef HAS_TOUCH
                 coord.x = 10 + FM * LW + (start == i ? 4 * FM * LW : 0);
-                coord.y = c_y;
                 coord.size = nchars - (start == i ? 4 : 0);
+#else
+                coord.x = 10 + FM * LW;
+                coord.size = nchars;
+#endif
+                coord.y = c_y;
+
                 coord.fgcolor = fileList[i][2] == "folder" ? FGCOLOR - 0x1111 : FGCOLOR;
                 coord.bgcolor = BGCOLOR;
             } else txt = " ";
             txt += fileList[i][0] + "                       ";
+#ifdef HAS_TOUCH
             tft->println(txt.substring(0, nchars - (start == i ? 6 : 0)));
+#else
+            tft->println(txt.substring(0, nchars));
+#endif
             opt.push_back(optItem);
             j++;
         }
@@ -873,8 +879,7 @@ Opt_Coord listFiles(int index, String fileList[][3], std::vector<MenuOptions> &o
 #ifdef HAS_TOUCH
     if (num_pages != show_page + 1) {
         tft->setTextColor(ALCOLOR, BGCOLOR);
-        opt.push_back(
-            MenuOptions("", "+", nullptr, true, false, 0, tft->getCursorY(), tftWidth, FM * LH + 6)
+        opt.push_back(MenuOptions("", "+", nullptr, true, false, 0, tft->getCursorY(), tftWidth, FM * LH + 6)
         );
         tft->drawCentreString("..Page Down..", tftWidth / 2, tft->getCursorY(), 1);
     }

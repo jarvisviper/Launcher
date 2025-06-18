@@ -65,6 +65,9 @@ Things that needs to be done in next updates
      * [ ] LVGL for e-paper displays
 
 ## Changelog
+* 2.4.11 (Beta):
+     * [x] Fixed first line [filelist](https://github.com/bmorcelli/Launcher/issues/166)
+
 * 2.4.10:
      * [x] Fixed T-Embed screen
      * [x] Fixed StickC (and plus) keyboard navigation
