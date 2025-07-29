@@ -319,6 +319,17 @@
                 },
               }
             - {
+                vendor: "WIP",
+                name: "CYD-4827S043R",
+                description: "(ESP32S3, 4.3in, 480x272, Resistive)",
+                link: "",
+                family: "ESP32-S3",
+                env: "CYD-4827S043R",
+                partitions: {
+                  bootloader_addr: "0x0",
+                },
+              }
+            - {
                 vendor: "Lilygo",
                 name: "T-Dongle S3 (tft)",
                 description: "(single press, double press and long press logic)",

@@ -516,6 +516,10 @@ String keyboard(String mytext, int maxSize, String msg) {
                 }
                 if (KeyStroke.enter) { break; }
                 KeyStroke.Clear();
+#ifdef E_PAPER_DISPLAY
+                tft->startCallback();
+                tft->display(false);
+#endif
             }
 #if !defined(T_LORA_PAGER) // T-LoRa-Pager does not have a select button
             if (check(SelPress)) break;

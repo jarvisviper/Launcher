@@ -66,10 +66,11 @@ Things that needs to be done in next updates
 
 ## Changelog
 * 2.4.11 (Beta):
-     * [] Changed from ArduinoJson to [Json](https://github.com/wachidsusilo/Json) library (lighter)
+     * [x] Added keyboard support to T-Deck Pro https://github.com/bmorcelli/Launcher/issues/180
      * [x] Added CSS, JS, Html online minifier
      * [x] Moved to ESP32Async/ESPAsyncWebServer official repo
      * [x] Port to [Lilygo Lora Pager](https://lilygo.cc/products/t-lora-pager) by @emericklaw
+     * [x] Port to [CYD-4827S043R](https://github.com/bmorcelli/Launcher/issues/186)
      * [x] Fixed first line [filelist](https://github.com/bmorcelli/Launcher/issues/166)
 
 * 2.4.10:
