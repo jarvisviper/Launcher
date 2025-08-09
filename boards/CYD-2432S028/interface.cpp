@@ -9,11 +9,6 @@
 #define TFT_BL GPIO_BCKL
 #endif
 
-// NOTE: Ensure TFT_WIDTH and TFT_HEIGHT are defined elsewhere in your project
-// to match the 240x320 resolution. For example:
-// #define TFT_WIDTH 240
-// #define TFT_HEIGHT 320
-
 #if defined(HAS_CAPACITIVE_TOUCH)
 #include "CYD28_TouchscreenC.h"
 #define CYD28_DISPLAY_HOR_RES_MAX 240
@@ -58,9 +53,8 @@ public:
         t.x = ti.y;
         t.y = TFT_WIDTH - ti.x;
 #else
-        // Corrected touch coordinate mapping for a 240x320 display in portrait mode
         t.x = ti.x;
-        t.y = ti.y;
+        t.y = (tftHeight + 20) - ti.y;
 #endif
         t.pressed = true;
         TouchLib::raw_data[0] = 0; // resets the read raw reading, that triggers TouchLib::read() to true, and
@@ -112,14 +106,13 @@ public:
 CYD_Touch touch;
 
 #else
-// This section is a fallback, primarily for resistive touchscreens
 #include "CYD28_TouchscreenR.h"
 #ifndef CYD28_DISPLAY_HOR_RES_MAX
-#define CYD28_DISPLAY_HOR_RES_MAX 240 // Corrected for 240x320 display
+#define CYD28_DISPLAY_HOR_RES_MAX 320
 #endif
 
 #ifndef CYD28_DISPLAY_VER_RES_MAX
-#define CYD28_DISPLAY_VER_RES_MAX 320 // Corrected for 240x320 display
+#define CYD28_DISPLAY_VER_RES_MAX 240
 #endif
 CYD28_TouchR touch(CYD28_DISPLAY_HOR_RES_MAX, CYD28_DISPLAY_VER_RES_MAX);
 #endif
@@ -130,7 +123,7 @@ CYD28_TouchR touch(CYD28_DISPLAY_HOR_RES_MAX, CYD28_DISPLAY_VER_RES_MAX);
 ** Description:   initial setup for the device
 ***************************************************************************************/
 void _setup_gpio() {
-#if !defined(HAS_CAPACITIVE_TOUCH) &&                                                                     \
+#if !defined(HAS_CAPACITIVE_TOUCH) &&                                                                        \
     (defined(TOUCH_GT911_I2C) || defined(TOUCH_CST816S_I2C) || defined(TOUCH_AXS15231B_I2C))
     Wire.begin(TOUCH_SDA_PIN, TOUCH_SCL_PIN);
 #endif
@@ -154,7 +147,7 @@ void _post_setup_gpio() {
     if (!touch.begin(
 #ifdef CYD28_TouchR_MOSI
 #if TFT_MOSI == CYD28_TouchR_MOSI
-        &SPI
+            &SPI
 #endif
 #endif
 
@@ -215,18 +208,17 @@ void InputHandler(void) {
             t.y = tmp;
 #endif
 #endif
-            // These rotation blocks are crucial for touch mapping and should be verified
-            // against your specific display's physical orientation and the touch controller's output.
-            if (rotation == 3) {
+
+            if (rotation == 1) {
                 t.y = (tftHeight + 20) - t.y;
                 t.x = tftWidth - t.x;
             }
-            if (rotation == 0) {
+            if (rotation == 2) {
                 int tmp = t.x;
                 t.x = tftWidth - t.y;
                 t.y = tmp;
             }
-            if (rotation == 2) {
+            if (rotation == 0) {
                 int tmp = t.x;
                 t.x = t.y;
                 t.y = (tftHeight + 20) - tmp;
